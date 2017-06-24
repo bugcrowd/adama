@@ -1,6 +1,6 @@
 # Commander Adama
 
-Commander Adama is a command pattern library heavily inspired by Collective Idea's [Interactor](https://github.com/collectiveidea/interactor) gem.
+Commander Adama is a bare bones command pattern library inspired by Collective Idea's [Interactor](https://github.com/collectiveidea/interactor) gem.
 
 Commands are small classes that represent individual units of work. Each command is executed by a client "calling" it. An invoker is a class responsible for the execution of one or more commands.
 
@@ -24,7 +24,7 @@ class DestroyCylons
 end
 ```
 
-Including the `Adama::Command` module extends the class with the `.call` class method. So you would execute this command like so:
+Including the `Adama::Command` module extends the class with the `.call` class method. So you would execute the command like this:
 
 ```ruby
 DestroyCylons.call(captain: :apollo)
@@ -86,7 +86,7 @@ If there is an error in any of those commands, the invoker will call `FindEarth.
 
 ### Errors
 
-A `Adama::Command` or `Adama::Invoker` will *always* raise an error of type `Adama::Errors::BaseError`.
+`Adama::Command#call` or `Adama::Invoker#call` will *always* raise an error of type `Adama::Errors::BaseError`.
 
 More specifically:
 
@@ -96,7 +96,11 @@ If a command fails while being called in an invoker, the commands will be rolled
 
 If a command fails while rolling back within the invoker, the invoker will raise `Adama::Errors::InvokerRollbackError`.
 
-The base error type `Adama::Errors::Adama` is designed to be initialized with three optional non-positional keyword args `error`, `command`, `invoker`. The error is the original exception that was rescued in the command or invoker, the command is the command that failed, and if the command or rollback failed in an invoker, the invoker field is set to the instance of the failed invoker.
+The base error type `Adama::Errors::Adama` is designed to be initialized with three optional keyword args:
+
+`error` - the original exception that was rescued in the command or invoker.
+`command` - the failed command instance.
+`invoker` - the failed invoker instance, set if the command or rollback failed in an invoker.
 
 ```ruby
 module Adama
@@ -126,6 +130,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/bugcrowd/adama.
-
-So Say We All.
+Bug reports and pull requests are welcome on GitHub at https://github.com/bugcrowd/adama. So Say We All.
