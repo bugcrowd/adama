@@ -3,7 +3,6 @@ module Adama
     def self.included(base)
       base.class_eval do
         extend ClassMethods
-        include InstanceMethods
       end
     end
 
@@ -17,30 +16,28 @@ module Adama
       end
     end
 
-    module InstanceMethods
-      def errors
-        @errors ||= {}
+    def errors
+      @errors ||= {}
+    end
+
+    def valid?
+      @valid
+    end
+
+    def validate!
+      @valid = true
+      self.class.validators.each do |validator|
+        validator.validate! self
+        merge_errors validator.errors
+        @valid = validator.valid? && @valid
       end
+    end
 
-      def valid?
-        @valid
-      end
+    private
 
-      def validate!
-        @valid = true
-        self.class.validators.each do |validator|
-          validator.validate! self
-          merge_errors validator.errors
-          @valid = validator.valid? && @valid
-        end
-      end
-
-      private
-
-      def merge_errors(new_errors)
-        errors.merge!(new_errors) do |key, oldval, newval|
-          (newval.is_a?(Array) ? (oldval + newval) : (oldval << newval)).uniq
-        end
+    def merge_errors(new_errors)
+      errors.merge!(new_errors) do |key, oldval, newval|
+        (newval.is_a?(Array) ? (oldval + newval) : (oldval << newval)).uniq
       end
     end
 
