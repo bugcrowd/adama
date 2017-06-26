@@ -31,17 +31,7 @@ module Adama
 
     def initialize(**kwargs)
       @kwargs = kwargs
-      insert_kwarg_attributes(kwargs)
-    end
-
-    def insert_kwarg_attributes(kwargs)
-      kwargs.each do |key, value|
-        instance_variable_set "@#{key}", value
-
-        self.class.class_eval do
-          attr_accessor :"#{key}"
-        end
-      end
+      validate_attributes! kwargs
     end
 
     # Internal instance method. Called by both the call class method, and by

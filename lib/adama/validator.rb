@@ -3,6 +3,7 @@ module Adama
     def self.included(base)
       base.class_eval do
         extend ClassMethods
+        attr_reader :kwargs
       end
     end
 
@@ -13,6 +14,21 @@ module Adama
 
       def validators
         @validators ||= []
+      end
+    end
+
+    def validate_attributes! kwargs
+      create_attributes kwargs
+      validate!
+    end
+
+    def create_attributes kwargs
+      kwargs.each do |key, value|
+        instance_variable_set "@#{key}", value
+
+        self.class.class_eval do
+          attr_accessor :"#{key}"
+        end
       end
     end
 
