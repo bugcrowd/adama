@@ -1,4 +1,3 @@
-require "pry"
 require "adama/version"
 require "adama/errors"
 require "adama/validator"
