@@ -16,6 +16,7 @@ module Adama
     # Internal: Install Command's behavior in the given class.
     def self.included(base)
       base.class_eval do
+        include Validator
         extend ClassMethods
         attr_reader :kwargs
       end
@@ -23,13 +24,24 @@ module Adama
 
     module ClassMethods
       # public invoke a command
-      def call(kwargs = {})
-        new(kwargs).tap(&:run)
+      def call(**kwargs)
+        new(**kwargs).tap(&:run)
       end
     end
 
-    def initialize(kwargs = {})
+    def initialize(**kwargs)
       @kwargs = kwargs
+      insert_kwarg_attributes(kwargs)
+    end
+
+    def insert_kwarg_attributes(kwargs)
+      kwargs.each do |key, value|
+        instance_variable_set "@#{key}", value
+
+        self.class.class_eval do
+          attr_accessor :"#{key}"
+        end
+      end
     end
 
     # Internal instance method. Called by both the call class method, and by

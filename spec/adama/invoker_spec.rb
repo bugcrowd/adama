@@ -1,7 +1,9 @@
 require 'spec_helper'
+require_relative 'validator_examples'
 require_relative 'command_examples'
 
 RSpec.describe Adama::Invoker do
+  include_examples :validator_base
   include_examples :command_base
 
   before(:context) do
@@ -39,10 +41,13 @@ RSpec.describe Adama::Invoker do
 
     it 'calls .new on the commands in order' do
       Invoker.call(**kwargs)
-      expect(Command1).to have_received(:new).with(**kwargs).ordered
-      expect(Command2).to have_received(:new).with(**kwargs).ordered
-      expect(Command3).to have_received(:new).with(**kwargs).ordered
-      expect(Command4).to have_received(:new).with(**kwargs).ordered
+      expect(Command1).to have_received(:new).ordered
+      expect(Command2).to have_received(:new).ordered
+      expect(Command3).to have_received(:new).ordered
+      expect(Command4).to have_received(:new).ordered
+
+      kwargs.each do |key, value|
+      end
     end
 
     it 'calls .call on the commands in order' do
