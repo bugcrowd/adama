@@ -16,6 +16,7 @@ module Adama
     # Internal: Install Command's behavior in the given class.
     def self.included(base)
       base.class_eval do
+        prepend Validator
         extend ClassMethods
         attr_reader :kwargs
       end
@@ -23,12 +24,12 @@ module Adama
 
     module ClassMethods
       # public invoke a command
-      def call(kwargs = {})
-        new(kwargs).tap(&:run)
+      def call(**kwargs)
+        new(**kwargs).tap(&:run)
       end
     end
 
-    def initialize(kwargs = {})
+    def initialize(**kwargs)
       @kwargs = kwargs
     end
 
