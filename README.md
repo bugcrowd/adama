@@ -38,8 +38,10 @@ At this point our command `DestroyCylons` doesn't do much. As explained above, t
 class DestroyCylons
   include Adama::Command
 
+  validate_presence_of :captain
+
   def call
-    got_destroy_cylons(kwargs[:captain])
+    got_destroy_cylons(captain)
   end
 
   def rollback
@@ -48,7 +50,7 @@ class DestroyCylons
 end
 ```
 
-The kwargs are available within the `#call` and `#rollback` instance methods due to an `attr_reader` in the `Adama::Command` module.
+Each validated attribute is available as an attr_accessor on the instance of the command, so you can reference them directly in the `#call` method. within the `#call` and `#rollback` instance methods due to an `attr_reader` in the `Adama::Command` module.
 
 ### Invoker
 
