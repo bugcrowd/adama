@@ -17,7 +17,8 @@ shared_examples :validator_base do
 
       context 'when we validate a correctly passed in kwarg' do
         before do
-          klass.send(:validates_presence_of, [:foo, :key, :jar])
+          klass.validates_presence_of :foo, :key, :jar
+          klass.validates_presence_of :jar, :jar, :binks
           instance.validate!
         end
 
@@ -25,7 +26,8 @@ shared_examples :validator_base do
         it 'sets the correct errors' do
           expect(instance.errors).to eq({
             key: ['attribute missing'],
-            jar: ['attribute missing']
+            jar: ['attribute missing'],
+            binks: ['attribute missing']
           })
         end
       end

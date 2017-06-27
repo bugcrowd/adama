@@ -19,13 +19,6 @@ shared_examples :command_base do
 
       it { expect(klass).to have_received(:new).once.with(kwargs) }
       it { expect(instance).to have_received(:run).once.with(no_args) }
-
-      it 'sets the correct instance methods' do
-        kwargs.each do |key, val|
-          expect(instance.methods).to include key
-          expect(instance.send(key)).to eq val
-        end
-      end
     end
 
     describe '.call without args' do
