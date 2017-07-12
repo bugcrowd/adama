@@ -3,10 +3,14 @@ module Adama
     class BaseError < StandardError
       attr_reader :error, :command, :invoker
 
-      def initialize(error: nil, command: nil, invoker: nil)
+      def initialize(error:, command:, invoker: nil)
         @error = error
         @command = command
         @invoker = invoker
+      end
+
+      def to_s
+        "#{command.class.name} failed with #{error.class}: #{error.message}"
       end
     end
     class CommandError < BaseError; end
