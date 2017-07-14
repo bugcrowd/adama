@@ -34,12 +34,10 @@ module Adama
     end
 
     # Internal instance method. Called by both the call class method, and by
-    # the call method in the invoker. If it fails it rolls back the command
-    # and raises a CommandError.
-    def run(enable_rollback: true)
+    # the call method in the invoker. If it fails it raises a CommandError.
+    def run
       call
     rescue => error
-      rollback if enable_rollback
       raise Errors::CommandError.new error: error, command: self
     end
 
