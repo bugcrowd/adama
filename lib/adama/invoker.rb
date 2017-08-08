@@ -98,17 +98,13 @@ module Adama
         end
       end
 
-      # Iterate over the commands array, instantiate each command, add it to
-      # the called list and then run it. We don't want the command to call
-      # rollback itself as that will be handled by the rollback method above.
-      # To ensure this doesn't happen we pass in enable_rollback: false.
-      # Please ensure the command is placed on the array _prior_ to calling
-      # run, or else we'll miss rolling back the command that failed.
+      # Iterate over the commands array, instantiate each command, run it,
+      # and add it to the called list.
       def call
         self.class.commands.each do |command_klass|
           command = command_klass.new(kwargs)
+          command.run
           _called << command
-          command.run(enable_rollback: false)
         end
       end
     end

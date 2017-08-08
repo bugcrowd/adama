@@ -31,10 +31,10 @@ RSpec.describe Adama::Invoker do
 
   describe '.call' do
     before do
-      allow(instance_1).to receive(:run).with(enable_rollback: false)
-      allow(instance_2).to receive(:run).with(enable_rollback: false)
-      allow(instance_3).to receive(:run).with(enable_rollback: false)
-      allow(instance_4).to receive(:run).with(enable_rollback: false)
+      allow(instance_1).to receive(:run)
+      allow(instance_2).to receive(:run)
+      allow(instance_3).to receive(:run)
+      allow(instance_4).to receive(:run)
 
       Invoker.invoke(*command_list)
     end
@@ -52,10 +52,10 @@ RSpec.describe Adama::Invoker do
 
     it 'calls .call on the commands in order' do
       Invoker.call(**kwargs)
-      expect(instance_1).to have_received(:run).with(enable_rollback: false).ordered
-      expect(instance_2).to have_received(:run).with(enable_rollback: false).ordered
-      expect(instance_3).to have_received(:run).with(enable_rollback: false).ordered
-      expect(instance_4).to have_received(:run).with(enable_rollback: false).ordered
+      expect(instance_1).to have_received(:run).ordered
+      expect(instance_2).to have_received(:run).ordered
+      expect(instance_3).to have_received(:run).ordered
+      expect(instance_4).to have_received(:run).ordered
     end
   end
 
@@ -84,7 +84,7 @@ RSpec.describe Adama::Invoker do
         allow(instance_4).to receive(:rollback)
       end
 
-      it 'calls #rollback in reverse' do
+      it 'calls #rollback in reverse order on the commands that succeeded' do
         Invoker.invoke(*command_list)
         expect { Invoker.call(**kwargs) }
           .to raise_error(Adama::Errors::InvokerError) do |error|
@@ -97,10 +97,11 @@ RSpec.describe Adama::Invoker do
           expect(instance_3).to have_received(:call).with(no_args).ordered
           expect(instance_4).to have_received(:call).with(no_args).ordered
 
-          expect(instance_4).to have_received(:rollback).with(no_args).ordered
           expect(instance_3).to have_received(:rollback).with(no_args).ordered
           expect(instance_2).to have_received(:rollback).with(no_args).ordered
           expect(instance_1).to have_received(:rollback).with(no_args).ordered
+
+          expect(instance_4).not_to have_received(:rollback).with(no_args)
         end
       end
     end

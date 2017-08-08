@@ -45,13 +45,10 @@ shared_examples :command_base do
       context 'when the call raises an error' do
         before do
           allow(instance).to receive(:call).and_raise(StandardError)
-          allow(instance).to receive(:rollback)
         end
 
-        it 'raises the error, then calls rollback' do
-          expect { instance.run }.to raise_error(Adama::Errors::BaseError) do |_error|
-            expect(instance).to have_received(:rollback).once.with(no_args)
-          end
+        it 'raises the error' do
+          expect { instance.run }.to raise_error(Adama::Errors::BaseError)
         end
       end
     end
