@@ -3,10 +3,11 @@ module Adama
     class BaseError < StandardError
       attr_reader :error, :command, :invoker
 
-      def initialize(error:, command:, invoker: nil)
+      def initialize(error:, command:, invoker: nil, backtrace: nil)
         @error = error
         @command = command
         @invoker = invoker
+        set_backtrace backtrace if backtrace
       end
 
       def to_s

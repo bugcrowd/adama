@@ -69,13 +69,15 @@ module Adama
       # invoker "call" instance method, we won't have access to error's
       # command so need to test for it's existence.
       def run
+        command_caller = caller
         call
       rescue => error
         rollback
         raise Errors::InvokerError.new(
           error: error,
           command: error.respond_to?(:command) ? error.command : nil,
-          invoker: self
+          invoker: self,
+          backtrace: error.backtrace + ['Adama Invoker backtrace:'] + command_caller
         )
       end
 
@@ -93,7 +95,7 @@ module Adama
           begin
             command.rollback
           rescue => error
-            raise Errors::InvokerRollbackError.new(error: error, command: command, invoker: self)
+            raise Errors::InvokerRollbackError.new(error: error, command: command, invoker: self, backtrace: error.backtrace)
           end
         end
       end
