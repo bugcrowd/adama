@@ -44,11 +44,20 @@ shared_examples :command_base do
 
       context 'when the call raises an error' do
         before do
-          allow(instance).to receive(:call).and_raise(StandardError)
+          error = StandardError.new.tap { |e| e.set_backtrace 'original error backtrace' }
+          allow(instance).to receive(:call).and_raise(error)
         end
 
         it 'raises the error' do
           expect { instance.run }.to raise_error(Adama::Errors::BaseError)
+        end
+
+        it 'contains the backtrace of the original error' do
+          begin
+            instance.run
+          rescue => e
+            expect(e.backtrace).to include 'original error backtrace'
+          end
         end
       end
     end
