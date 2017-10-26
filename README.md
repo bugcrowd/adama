@@ -1,5 +1,7 @@
 # Commander Adama
 
+![Adama](https://raw.githubusercontent.com/wiki/bugcrowd/adama/images/adama.jpg)
+
 Adama is a bare bones command pattern library inspired by Collective Idea's [Interactor](https://github.com/collectiveidea/interactor) gem.
 
 Commands are small classes that represent individual units of work. Each command is executed by a client "calling" it. An invoker is a class responsible for the execution of one or more commands.
