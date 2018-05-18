@@ -69,7 +69,6 @@ module Adama
       # invoker "call" instance method, we won't have access to error's
       # command so need to test for it's existence.
       def run
-        command_caller = caller
         call
       rescue => error
         rollback
