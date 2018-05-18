@@ -77,7 +77,7 @@ module Adama
           error: error,
           command: error.respond_to?(:command) ? error.command : nil,
           invoker: self,
-          backtrace: error.backtrace + ['Adama Invoker backtrace:'] + command_caller
+          backtrace: error.backtrace
         )
       end
 

@@ -42,7 +42,7 @@ module Adama
       raise Errors::CommandError.new(
         error: error,
         command: self,
-        backtrace: error.backtrace + ['Adama Command backtrace:'] + command_caller
+        backtrace: error.backtrace
       )
     end
 
