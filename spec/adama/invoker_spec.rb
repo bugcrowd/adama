@@ -4,7 +4,7 @@ require_relative 'command_examples'
 
 RSpec.describe Adama::Invoker do
   # Run normal command spec examples for
-  # invokers because and Invoker is a glorified
+  # invokers because an Invoker is a glorified
   # version of a command.
   include_examples :validator_base
   include_examples :command_base

@@ -70,7 +70,7 @@ module Adama
       # invoker "call" instance method, we won't have access to error's
       # command so need to test for it's existence.
       def run
-        self.tap(&:call)
+        tap(&:call)
       rescue => error
         rollback
         raise Errors::InvokerError.new(
