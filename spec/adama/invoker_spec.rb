@@ -70,7 +70,7 @@ RSpec.describe Adama::Invoker do
     # class member var. This means that every Invoker of that
     # type calls the same comnmands.
     #
-    # The second method is to initialize a new instanvce of
+    # The second method is to initialize a new instance of
     # an invoker and pass the list of commands to invoke
     # to the instance. This means that we can dynamically
     # change the command list per Invoker instance.
