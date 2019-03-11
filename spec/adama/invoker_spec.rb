@@ -98,7 +98,14 @@ RSpec.describe Adama::Invoker do
       #     include Adama::Invoker
       #   end
       #
-      #   Invoker.new(foo: bar).invoke(Command1, Command2).call
+      #   Invoker.new(foo: bar).invoke(Command1, Command2).run
+      #
+      #
+      # NOTE: WE CALL `#run` ON THE INSTANCE INSTEAD OF `#call`
+      #
+      # This is because the `#run` method is the main executor
+      # in the context of the instance, and is wrapped in the
+      # internall error handlers.
       #
       let(:invokable) { Invoker.new **kwargs }
       let(:invoke) { invokable.run }
