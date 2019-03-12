@@ -88,6 +88,26 @@ Now, when you run `RebuildHumanRace.call(captain: :apollo, president: :laura)` i
 
 If there is an error in any of those commands, the invoker will call `FindEarth.rollback`, then `DestroyCylons.rollback`, then `GetArrowOfApollo.rollback` leaving everything just as it was in the beginning.
 
+#### Instance Invoker List
+
+Typically your Invoker class takes responsibility for an immutable set of actions, however sometimes it's handy to be able to adjust the invoked commands on the fly while keeping the error handling and rollback functionality of the invoker.
+
+e.g.
+
+```ruby
+class FightCylons
+  include Adama::Invoker
+end
+
+attack1 = Invoker.new(captain: :apollo, lieutenant:  :starbuck).invoke(Advance, Strafe, Fire)
+attack2 = Invoker.new(captain: :apollo, lieutenant:  :starbuck).invoke(Advance, Fire)
+
+attack1.run
+attack2.run
+```
+
+It's important to see that we're using the `#run` instance method on the Invoker instance (as the `.call` class method would). This ensures we execute the invoker in the error / rollback handler. Calling the `#call` instance method directly would simply execute each command, without any Invoker level error handling.
+
 ### Errors
 
 `Adama::Command#call` or `Adama::Invoker#call` will *always* raise an error of type `Adama::Errors::BaseError`.
