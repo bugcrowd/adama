@@ -36,7 +36,7 @@ module Adama
     # Internal instance method. Called by both the call class method, and by
     # the call method in the invoker. If it fails it raises a CommandError.
     def run
-      call
+      tap(&:call)
     rescue => error
       raise Errors::CommandError.new(
         error: error,

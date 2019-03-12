@@ -22,7 +22,7 @@ module Adama
         include Command
 
         # Our new class methods enable us to set the command list
-        extend ClassMethods
+        extend InvokeMethods
 
         # We override the Command class instance methods:
         #
@@ -30,11 +30,12 @@ module Adama
         #   call
         #   rollback
         include InstanceMethods
+        include InvokeMethods
       end
     end
 
     # Our new class methods enable us to set the command list
-    module ClassMethods
+    module InvokeMethods
 
       # Public class method. Call invoke in your class definition to
       # specify which commands will be executed.
@@ -49,6 +50,10 @@ module Adama
       #   )
       # end
       def invoke(*command_list)
+        if is_a?(Invoker) && self.class.commands.any?
+          raise(StandardError, 'Can\'t call invoke on an Invoker instance \
+                               with a class invocation list.')
+        end
         @commands = command_list.flatten
       end
 
@@ -69,7 +74,7 @@ module Adama
       # invoker "call" instance method, we won't have access to error's
       # command so need to test for it's existence.
       def run
-        call
+        tap(&:call)
       rescue => error
         rollback
         raise Errors::InvokerError.new(
@@ -102,7 +107,8 @@ module Adama
       # Iterate over the commands array, instantiate each command, run it,
       # and add it to the called list.
       def call
-        self.class.commands.each do |command_klass|
+        commands = self.commands.any? ? self.commands : self.class.commands
+        commands.each do |command_klass|
           command = command_klass.new(kwargs)
           command.run
           _called << command
