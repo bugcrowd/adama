@@ -50,6 +50,10 @@ module Adama
       #   )
       # end
       def invoke(*command_list)
+        if is_a?(Invoker) && self.class.commands.any?
+          raise(StandardError, 'Can\'t call invoke on an Invoker instance \
+                               with a class invocation list.')
+        end
         @commands = command_list.flatten
       end
 

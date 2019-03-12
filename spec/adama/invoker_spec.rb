@@ -33,6 +33,18 @@ RSpec.describe Adama::Invoker do
     allow(Command2).to receive(:new).and_return(instance_2)
     allow(Command3).to receive(:new).and_return(instance_3)
     allow(Command4).to receive(:new).and_return(instance_4)
+    Invoker.invoke []
+  end
+
+  describe '#invoke' do
+    let(:invokable) { Invoker }
+    before {  invokable.invoke *command_list }
+    subject { invokable.new **kwargs }
+
+    it 'does not let you call invoke on class and instance' do
+      expect { subject.invoke *command_list }
+        .to raise_error(StandardError)
+    end
   end
 
   describe '.call' do
