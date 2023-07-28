@@ -27,8 +27,8 @@ module Adama
     # This module is meant to be prepended to another module
     # Call the child class initializer first, this will set kwargs
     # Then validate
-    def initialize(**kwargs)
-      super(**kwargs)
+    def initialize(kwargs)
+      super(kwargs)
       validate!
     end
 
