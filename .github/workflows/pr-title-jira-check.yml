@@ -8,7 +8,7 @@ on:
       - reopened
 
 env:
-  ALLOWED_PATTERN: '^\[((PE|BC|INFRA|SEC|PLAT|SE)-[0-9]+|FIX|CHORE)\] .+'
+  ALLOWED_PATTERN: '^(\[((PE|BC|INFRA|SEC|PLAT|SE)-[0-9]+|FIX|CHORE)\]|((PE|BC|INFRA|SEC|PLAT|SE)-[0-9]+|FIX|CHORE)) .+'
   COMMENT_MARKER: '<!-- pr-title-jira-check -->'
 
 jobs:
